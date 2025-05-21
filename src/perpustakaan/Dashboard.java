@@ -47,7 +47,7 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        menu_management_buku = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu10 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -89,8 +89,13 @@ public class Dashboard extends javax.swing.JFrame {
 
         jMenu6.setText("Management");
 
-        jMenuItem3.setText("Management Buku");
-        jMenu6.add(jMenuItem3);
+        menu_management_buku.setText("Management Buku");
+        menu_management_buku.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                menu_management_bukuMousePressed(evt);
+            }
+        });
+        jMenu6.add(menu_management_buku);
 
         jMenuItem2.setText("Management Akun");
         jMenu6.add(jMenuItem2);
@@ -140,6 +145,11 @@ public class Dashboard extends javax.swing.JFrame {
         new LoginPage().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_logout
+
+    private void menu_management_bukuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu_management_bukuMousePressed
+       new ManagementBuku().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menu_management_bukuMousePressed
 
     /**
      * @param args the command line arguments
@@ -193,7 +203,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
@@ -201,6 +210,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JMenuItem menu_management_buku;
     private javax.swing.JLabel text_sapaan;
     // End of variables declaration//GEN-END:variables
 }

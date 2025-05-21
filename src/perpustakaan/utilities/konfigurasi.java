@@ -24,8 +24,9 @@ import org.json.simple.parser.ParseException;
  */
 public class konfigurasi {
     
-    private final String base_url = "http://localhost/api-perpustakaan/";
+    private final String base_url = "http://192.168.1.15/api-perpustakaan/";
     private String result;
+     private int resultIndex;
     
     public JSONObject sendGetRequest(String endpoint) throws IOException, ParseException{
         JSONObject obj = new JSONObject();
@@ -94,11 +95,17 @@ public class konfigurasi {
     
     public String convertToParams(HashMap<String,String> data){
         result = "";
+        resultIndex = 0;
         data.forEach((k, v) -> {
-           result += k + "='" + v + "'&";
+            if(resultIndex == data.size() - 1){
+                result += k + "=" + v + "";
+            }else{
+                result += k + "=" + v + "&";
+            }
+           resultIndex +=1;
         });
+        System.out.println(result);
         return result;
-        
     }
     
 }

@@ -4,6 +4,8 @@
  */
 package perpustakaan;
 
+import java.awt.Color;
+import perpustakaan.utilities.DateToEpoch;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,11 +24,16 @@ public class ManagementBuku extends javax.swing.JFrame {
 
     
     private HashMap<String,String> clsn_arr;
+    private String _clsn;
+    private Boolean canContinue;
+    private String id_buku;
     
     public ManagementBuku() {
         this.clsn_arr = new HashMap();
         initComponents();
         setClassificationNumber();
+        clearAllFields();
+        error_message.setVisible(false);
     }
 
 /**
@@ -41,6 +48,7 @@ public class ManagementBuku extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToggleButton1 = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         isbn_10 = new java.awt.TextField();
@@ -77,6 +85,12 @@ public class ManagementBuku extends javax.swing.JFrame {
         button_update = new javax.swing.JButton();
         button_delete = new javax.swing.JButton();
         button_clear = new javax.swing.JButton();
+        error_message = new javax.swing.JLabel();
+        cari_isbn10 = new javax.swing.JButton();
+        cari_isbn13 = new javax.swing.JButton();
+        cari_judul = new javax.swing.JButton();
+
+        jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Management Buku");
@@ -174,15 +188,47 @@ public class ManagementBuku extends javax.swing.JFrame {
 
         button_update.setText("update buku");
         button_update.setToolTipText("");
+        button_update.setEnabled(false);
 
         button_delete.setText("Delete Buku");
         button_delete.setToolTipText("");
+        button_delete.setEnabled(false);
+        button_delete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                button_deleteMousePressed(evt);
+            }
+        });
 
         button_clear.setText("Clear All");
         button_clear.setToolTipText("");
         button_clear.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 button_clearMousePressed(evt);
+            }
+        });
+
+        error_message.setForeground(new java.awt.Color(255, 51, 51));
+        error_message.setText("error_message");
+
+        cari_isbn10.setText("Cari");
+        cari_isbn10.setToolTipText("");
+        cari_isbn10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cari_isbn10MousePressed(evt);
+            }
+        });
+
+        cari_isbn13.setText("Cari");
+        cari_isbn13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cari_isbn13MousePressed(evt);
+            }
+        });
+
+        cari_judul.setText("Cari Judul");
+        cari_judul.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cari_judulMousePressed(evt);
             }
         });
 
@@ -199,29 +245,6 @@ public class ManagementBuku extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel12))
-                                        .addGap(19, 19, 19)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-                                            .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(isbn_13, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(isbn_10, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(0, 0, Short.MAX_VALUE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(author, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(publisher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel9)
@@ -236,8 +259,42 @@ public class ManagementBuku extends javax.swing.JFrame {
                                                 .addComponent(jLabel17)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(classification_number, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(186, 186, 186)))
-                                .addGap(32, 32, 32)
+                                        .addGap(218, 218, 218))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(jLabel4)
+                                                    .addComponent(jLabel5)
+                                                    .addComponent(jLabel12))
+                                                .addGap(19, 19, 19)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(isbn_10, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(cari_isbn10))
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(isbn_13, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(cari_isbn13)))
+                                                        .addGap(0, 0, Short.MAX_VALUE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(cari_judul, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(author, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(publisher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGap(32, 32, 32)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel11)
@@ -264,7 +321,8 @@ public class ManagementBuku extends javax.swing.JFrame {
                                         .addComponent(button_create, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(button_delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(button_update, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(button_update, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                                    .addComponent(error_message, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))))
@@ -306,20 +364,22 @@ public class ManagementBuku extends javax.swing.JFrame {
                             .addComponent(button_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(isbn_10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(isbn_10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel12))
+                            .addComponent(cari_isbn10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(isbn_13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(isbn_13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cari_isbn13, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cari_judul, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -350,7 +410,10 @@ public class ManagementBuku extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel17)
                             .addComponent(classification_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(button_update, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(button_update, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(error_message)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(button_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -372,14 +435,136 @@ public class ManagementBuku extends javax.swing.JFrame {
     }//GEN-LAST:event_publisherActionPerformed
 
     private void create_book(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_create_book
-       HashMap<String,String> book = getBookData();
+        try {
+            HashMap<String,String> book = getBookData();
+            if(!canContinueToDoing(book))  {
+                error_message.setForeground(Color.RED);
+                error_message.setText("Pastikan Semua Kolom Terisi");
+                error_message.setVisible(true);
+                return;
+            };
             konfigurasi konfigurasi = new konfigurasi();
-            System.out.println(konfigurasi.convertToParams(book));
+            JSONObject result = konfigurasi.sendPostRequest("models/book/add.php", book);
+            System.out.println(result.get("isSuccess").equals(true));
+            if(result.get("isSuccess").equals(true)){
+                this.clearAllFields();
+                error_message.setForeground(Color.GREEN);
+                error_message.setText("Berhasil membuat buku,");
+                error_message.setVisible(true);
+            }else{
+                error_message.setForeground(Color.RED);
+                error_message.setText(result.get("message").toString());
+                error_message.setVisible(true);
+            }
+//       System.out.println(konfigurasi.convertToParams(book));
+        } catch (IOException ex) {
+            System.out.println("data yang diberikan null, pada IoExceptioon");
+        } catch (ParseException ex) {
+                        System.out.println("data yang diberikan null, pada ParseException");
+//            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_create_book
 
     private void button_clearMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button_clearMousePressed
        this.clearAllFields();
     }//GEN-LAST:event_button_clearMousePressed
+
+    private void cari_isbn10MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cari_isbn10MousePressed
+        try {
+            String isbn10 = isbn_10.getText();
+            if(isbn10.isEmpty()) return;
+            JSONObject result = new konfigurasi().sendGetRequest("models/book/cari.php?isbn_10="+isbn10);
+            if(result.get("isSuccess").equals(true) && result.get("isFound").equals(true)){
+                JSONArray arr = (JSONArray) result.get("data");
+                 if(!arr.isEmpty()){
+                    JSONObject book = (JSONObject) arr.get(0);
+                    this.setField(book);
+                    error_message.setForeground(Color.GREEN);
+                    error_message.setText("Berhasil mencari isbn_10");
+                    error_message.setVisible(true);
+                    return;
+                }
+            } 
+            error_message.setForeground(Color.RED);
+            error_message.setText(result.get("message").toString());
+            error_message.setVisible(true);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cari_isbn10MousePressed
+
+    private void cari_isbn13MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cari_isbn13MousePressed
+        try {
+            String isbn13 = isbn_13.getText();
+            if(isbn13.isEmpty()) return;
+            JSONObject result = new konfigurasi().sendGetRequest("models/book/cari.php?isbn_13="+isbn13);
+            if(result.get("isSuccess").equals(true) && result.get("isFound").equals(true)){
+                JSONArray arr = (JSONArray) result.get("data");
+               if(!arr.isEmpty()){
+                    JSONObject book = (JSONObject) arr.get(0);
+                    this.setField(book);
+                    error_message.setForeground(Color.GREEN);
+                    error_message.setText("Berhasil mencari isbn_13");
+                    error_message.setVisible(true);
+                    return;
+                }
+                
+            }
+            error_message.setForeground(Color.RED);
+            error_message.setText(result.get("message").toString());
+            error_message.setVisible(true);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cari_isbn13MousePressed
+
+    private void cari_judulMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cari_judulMousePressed
+        try {
+            String judul = title.getText();
+            if(judul.isEmpty()) return;
+            JSONObject result = new konfigurasi().sendGetRequest("models/book/cari.php?title="+judul);
+            if(result.get("isSuccess").equals(true) && result.get("isFound").equals(true)){
+                JSONArray arr = (JSONArray) result.get("data");
+                if(!arr.isEmpty()){
+                    JSONObject book = (JSONObject) arr.get(0);
+                    this.setField(book);
+                    error_message.setForeground(Color.GREEN);
+                    error_message.setText("Berhasil mencari judul buku");
+                    error_message.setVisible(true);
+                    return;
+                }
+            }
+           error_message.setForeground(Color.RED);
+            error_message.setText(result.get("message").toString());
+            error_message.setVisible(true);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cari_judulMousePressed
+
+    private void button_deleteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button_deleteMousePressed
+      
+        try {
+            System.out.println("delete book dengan id =" +id_buku);
+            HashMap<String,String> book = new HashMap();
+            book.put("id", id_buku);
+            JSONObject result = new konfigurasi().sendPostRequest("models/book/delete.php",book);
+            if(result.get("isSuccess").equals(true)){
+                error_message.setForeground(Color.ORANGE);
+                error_message.setText(result.get("message").toString());
+                error_message.setVisible(true);
+                this.clearAllFields();
+                return;
+            }
+            error_message.setForeground(Color.RED);
+            error_message.setText(result.get("message").toString());
+            error_message.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(ManagementBuku.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_button_deleteMousePressed
 
     /**
      * @param args the command line arguments
@@ -435,10 +620,12 @@ public class ManagementBuku extends javax.swing.JFrame {
     }
     
     private void clearAllFields(){
+        id_buku = "";
         isbn_10.setText("");
         isbn_13.setText("");
         title.setText("");
         description.setText("");
+        author.setText("");
         publisher.setText("");
         publish_year.setValue(1);
         edition_number.setValue(1);
@@ -446,9 +633,9 @@ public class ManagementBuku extends javax.swing.JFrame {
         classification_number.setSelectedIndex(1);
         category.setText("");
         language.setSelectedIndex(0);
-//        receiver_date.setDate(new Date(LocalDate.now()));
-        image_url.setText("");
+        image_url.setText("https://cdn2.hubspot.net/hubfs/242200/shutterstock_774749455.jpg");
         status.setSelectedIndex(0);
+        button_delete.setEnabled(false);
     }
     
     private HashMap<String,String>  getBookData(){
@@ -462,25 +649,82 @@ public class ManagementBuku extends javax.swing.JFrame {
         book.put("publish_year", String.valueOf(publish_year.getValue()));
         book.put("edition_number", String.valueOf(edition_number.getValue()));
         book.put("total_pages", String.valueOf(total_pages.getValue()));
-         book.put("classification_number",classification_number.getSelectedItem().toString()); // If you add this field
+        book.put("classification-number",this.getClassificationNumber()); // If you add this field
         book.put("category", category.getText());
         book.put("language", language.getSelectedItem().toString());
-        book.put("receiver_date", receiver_date.getDate().toString());
-        book.put("image_url", image_url.getText());
+        book.put("receiver-date", DateToEpoch.DateToEpochMililiseconds(receiver_date.getDate().toString()));
+        book.put("image-url", image_url.getText());
         book.put("status", status.getSelectedItem().toString());
         return book;
     }
-
+    
+    private String getClassificationNumber(){
+        String clsn = classification_number.getSelectedItem().toString();
+        clsn_arr.forEach((k, v) -> {
+            if(k.equals(clsn)){   
+               _clsn = v;
+            }
+        });
+        return _clsn;
+    }
+    
+     private String getClassificationByNumber(String number){
+        clsn_arr.forEach((k, v) -> {
+            if(v.equals(number)){   
+                System.out.println(k);
+               _clsn = k;
+            }
+        });
+        return _clsn;
+    }
+    
+    private Boolean canContinueToDoing(HashMap<String,String> data){
+        canContinue = true;
+        data.forEach((k, v) -> {
+            if(v.isEmpty() && !k.contains("isbn")){
+                if(k.equals("image_url")){
+                    image_url.setText("https://cdn2.hubspot.net/hubfs/242200/shutterstock_774749455.jpg");
+                }else{
+                    canContinue = false;
+                }
+            }
+        });
+        return canContinue;
+    }
+    
+    private void setField(JSONObject book){
+        id_buku = (String) book.get("id");
+        isbn_10.setText((String) book.get("isbn_10"));
+        isbn_13.setText((String) book.get("isbn_13"));
+        title.setText(book.get("title").toString());
+        description.setText(book.get("description").toString());
+        author.setText(book.get("author").toString());
+        publisher.setText(book.get("publisher").toString());
+        publish_year.setValue(Integer.parseInt((String) book.get("publication_year")));
+        edition_number.setValue(Integer.parseInt((String) book.get("edition_number")));
+        total_pages.setValue(Integer.parseInt((String) book.get("total_pages")));
+        classification_number.setSelectedItem(this.getClassificationByNumber((String) book.get("clsn_id")));
+        category.setText(book.get("category").toString());
+        language.setSelectedItem(book.get("language").toString());
+        image_url.setText(book.get("image_url").toString());
+        status.setSelectedItem(book.get("status").toString());
+        button_delete.setEnabled(true);
+    }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.TextField author;
     private javax.swing.JButton button_clear;
     private javax.swing.JButton button_create;
     private javax.swing.JButton button_delete;
     private javax.swing.JButton button_update;
+    private javax.swing.JButton cari_isbn10;
+    private javax.swing.JButton cari_isbn13;
+    private javax.swing.JButton cari_judul;
     private java.awt.TextField category;
     private javax.swing.JComboBox<String> classification_number;
     private javax.swing.JTextArea description;
     private com.toedter.calendar.JYearChooser edition_number;
+    private javax.swing.JLabel error_message;
     private java.awt.TextField image_url;
     private java.awt.TextField isbn_10;
     private java.awt.TextField isbn_13;
@@ -501,6 +745,7 @@ public class ManagementBuku extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private com.toedter.components.JLocaleChooser language;
     private com.toedter.calendar.JYearChooser publish_year;
     private java.awt.TextField publisher;
