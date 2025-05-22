@@ -26,6 +26,14 @@ public class Storage {
          try{
         
             File file = new File("secret/storage.txt");
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException ex) {
+                    Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
             Scanner scanner = new Scanner(file);
 
 

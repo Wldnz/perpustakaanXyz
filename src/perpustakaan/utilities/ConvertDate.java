@@ -1,11 +1,12 @@
 package perpustakaan.utilities;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class DateToEpoch {
+public class ConvertDate {
     public static String DateToEpochMililiseconds(String dateString){
         String result = "";
         // Define the format string. 'z' for timezone abbreviation (WIB)
@@ -27,4 +28,11 @@ public class DateToEpoch {
         }
         return result;
     }
+    
+    public static Date epochMililisecondsToDate(String epochMililiseconds){
+        Long epoch = Long.parseLong(epochMililiseconds);
+        Date date = new Date(epoch);
+        return date; 
+    }
+    
 }

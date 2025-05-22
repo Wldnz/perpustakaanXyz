@@ -24,7 +24,7 @@ import org.json.simple.parser.ParseException;
  */
 public class konfigurasi {
     
-    private final String base_url = "http://192.168.1.15/api-perpustakaan/";
+    private final String base_url = "http://localhost/api-perpustakaan/";
     private String result;
      private int resultIndex;
     

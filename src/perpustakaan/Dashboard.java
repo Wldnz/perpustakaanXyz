@@ -95,6 +95,11 @@ public class Dashboard extends javax.swing.JFrame {
                 menu_management_bukuMousePressed(evt);
             }
         });
+        menu_management_buku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_management_bukuActionPerformed(evt);
+            }
+        });
         jMenu6.add(menu_management_buku);
 
         jMenuItem2.setText("Management Akun");
@@ -105,6 +110,11 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu10.setText("Riwayat");
 
         jMenuItem4.setText("Riwayat Peminjaman");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu10.add(jMenuItem4);
 
         jMenuBar1.add(jMenu10);
@@ -150,6 +160,15 @@ public class Dashboard extends javax.swing.JFrame {
        new ManagementBuku().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_menu_management_bukuMousePressed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+       new ManagePeminjaman().setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void menu_management_bukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_management_bukuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menu_management_bukuActionPerformed
 
     /**
      * @param args the command line arguments

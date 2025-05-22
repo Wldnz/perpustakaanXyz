@@ -169,7 +169,7 @@ public class LoginPage extends javax.swing.JFrame {
             error_message.setText("Salah Satu Data yang dimasukan tidak ada, silahkan coba lagi");
             return;
         }
-        URL url = new URL("http://192.168.1.15/api-perpustakaan/login.php");
+        URL url = new URL("http://localhost/api-perpustakaan/login.php");
         String params = "username=" + usernameLogin + "&password=" + passwordLogin;
         HttpURLConnection koneksi = (HttpURLConnection) url.openConnection();
         koneksi.setRequestMethod("POST");
