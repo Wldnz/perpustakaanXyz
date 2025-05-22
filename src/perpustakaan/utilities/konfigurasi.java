@@ -46,7 +46,7 @@ public class konfigurasi {
                 }
                 
                 bfr.close();
-                
+                System.out.println(resp);
                 JSONParser parser = new JSONParser();
                 obj = (JSONObject) parser.parse(resp.toString());
             }
@@ -83,6 +83,7 @@ public class konfigurasi {
                 bfr.close();
                 
                 JSONParser parser = new JSONParser();
+                System.out.println(resp);
                 obj = (JSONObject) parser.parse(resp.toString());
             }
             
