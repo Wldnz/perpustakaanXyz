@@ -1,6 +1,6 @@
 # Installation PerpustakaanXyz on Android Application
 Go To `github.com/Wldnz/perpustakaanXyz/releases/tag/testing-phase`, scroll down then download perpustakaanxyz.apk  
-Congratulations!, Now You Can Use Application To Borrow The Book U Want..  
+Congratulations!, Now You Can Use Application To Borrow The Book You Wanted..  
 #
 
 # How To Use Website To Manage Library  
